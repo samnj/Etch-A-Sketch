@@ -1,0 +1,49 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body,
+div {
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: rgb(168, 163, 163);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button,
+input,
+label {
+  display: block;
+}
+
+.side-panel {
+  display: flex;
+  flex-direction: column;
+}
+
+.grid-container {
+  background: white;
+  max-width: 50vw;
+  aspect-ratio: 1 / 1;
+  flex-basis: 100%;
+  display: grid;
+}
+
+.box {
+  border: 0.01rem solid rgba(161, 159, 159, 0.4);
+}
+
+.painted {
+  background: black;
+}
+
+.unpainted {
+  background: white;
+}
