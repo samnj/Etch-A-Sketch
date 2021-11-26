@@ -14,10 +14,10 @@ let tool = tools[0]
 pencilBtn.addEventListener('click', () => tool = tools[0])
 eraserBtn.addEventListener('click', () => tool = tools[1])
 
-gridSizeSlider.addEventListener('change', (e) => {
+gridSizeSlider.addEventListener('change', () => {
   removeChildren(gridContainer)
-  createGrid(e.target.value)
   const gridSize = gridSizeSlider.value
+  createGrid(gridSize)
   label.textContent = `Grid size: ${gridSize} X ${gridSize}`
 })
 
