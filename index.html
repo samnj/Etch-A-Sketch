@@ -13,11 +13,19 @@
 <body>
   <div class="side-panel">
     <button class="pencil-button">Pencil</button>
+
+    <input type="color" id="pencil-color" name="pencil-color">
+    <label for="pencil-color">Pencil color</label>
+
+    <input type="color" id="bg-color" name="bg-color" value="#ffffff">
+    <label for="bg-color">Background color</label>
+
     <button class="eraser-button">Eraser</button>
-    <button class="clear-grid-button">Clear grid</button>
+    <button id="toggle-grid-borders" value="on">Toggle grid</button>
+    <button class="clear-grid-button">Clear canvas</button>
     <div>
       <input type="range" name="grid-slider" id="grid-slider" value="16" min="2" max="100">
-      <label for="grid-slider">Grid size: 16 X 16</label>
+      <label for="grid-slider" id="grid-slider-label">Grid size: 16 X 16</label>
     </div>
   </div>
   <div class="grid-container"></div>

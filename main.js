@@ -1,18 +1,39 @@
 'use strict'
 
 const gridContainer = document.querySelector('.grid-container')
-
 const pencilBtn = document.querySelector('.pencil-button')
+const pencilColor = document.querySelector('#pencil-color')
+const bgColor = document.querySelector('#bg-color')
 const eraserBtn = document.querySelector('.eraser-button')
+const toggleGridBtn = document.querySelector('#toggle-grid-borders')
 const clearGridBtn = document.querySelector('.clear-grid-button')
 const gridSizeSlider = document.querySelector('#grid-slider')
-const label = document.querySelector('label')
+const label = document.querySelector('#grid-slider-label')
 
 const tools = ['pencil', 'eraser']
 let tool = tools[0]
 
-pencilBtn.addEventListener('click', () => tool = tools[0])
-eraserBtn.addEventListener('click', () => tool = tools[1])
+pencilBtn.addEventListener('click', () => { tool = tools[0] })
+eraserBtn.addEventListener('click', () => { tool = tools[1] })
+toggleGridBtn.addEventListener('click', () => {
+  if (toggleGridBtn.value === 'on') {
+    toggleGridBtn.value = 'off'
+    hideGridBorders()
+  } else {
+    toggleGridBtn.value = 'on'
+    showGridBorders()
+  }
+})
+
+bgColor.addEventListener('input', () => {
+  setTimeout(() => {
+    for (let i = 0; i < gridContainer.children.length; i++) {
+      if (!(gridContainer.children[i].classList.contains('painted'))) {
+        gridContainer.children[i].style.backgroundColor = bgColor.value
+      }
+    }
+  }, 500)
+})
 
 gridSizeSlider.addEventListener('change', () => {
   removeChildren(gridContainer)
@@ -27,34 +48,37 @@ function createGrid (gridSize) {
   for (let i = 0; i < gridSize ** 2; i++) {
     const div = document.createElement('div')
     div.classList.add('box')
+    div.style.backgroundColor = bgColor.value
     gridContainer.append(div)
   }
   gridContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`
-
   addGridListeners()
+  if (toggleGridBtn.value === 'on') {
+    showGridBorders()
+  }
 }
 
 function addGridListeners () {
   const boxes = document.querySelectorAll('.box')
   boxes.forEach(box => box.addEventListener('mousedown', (e) => {
     e.preventDefault()
-    if (tool === 'pencil') {
-      box.classList.add('painted')
-    } else if (tool === 'eraser') {
-      box.classList.remove('painted')
-    }
-    
+    applyToolAction(box)
   }))
-  
   boxes.forEach(box => box.addEventListener('mouseenter', (e) => {
     if (e.buttons > 0) {
-      if (tool === 'pencil') {
-        box.classList.add('painted')
-      } else if (tool === 'eraser') {
-        box.classList.remove('painted')
-      }
+      applyToolAction(box)
     }
   }))
+}
+
+function applyToolAction (box) {
+  if (tool === 'pencil') {
+    box.style.backgroundColor = pencilColor.value
+    box.classList.add('painted')
+  } else if (tool === 'eraser') {
+    box.style.backgroundColor = bgColor.value
+    box.classList.remove('painted')
+  }
 }
 
 function removeChildren (parentElement) {
@@ -66,31 +90,32 @@ function removeChildren (parentElement) {
 }
 
 function clearGrid () {
-  const gridChildren = gridContainer.children
-  for (let i = 0; i < gridChildren.length; i++) {
-    gridChildren[i].classList.remove('painted')
+  for (let i = 0; i < gridContainer.children.length; i++) {
+    gridContainer.children[i].style.backgroundColor = bgColor.value
+    gridContainer.children[i].classList.remove('painted')
+  }
+}
+
+function showGridBorders () {
+  const borderStyle = '0.01rem solid rgba(161, 159, 159, 0.4)'
+  for (let i = 0; i < gridContainer.children.length; i++) {
+    gridContainer.children[i].style.borderRight = borderStyle
+    gridContainer.children[i].style.borderBottom = borderStyle
+    if (i < gridSizeSlider.value) {
+      gridContainer.children[i].style.borderTop = borderStyle
+      if (i === 0) {
+        gridContainer.children[i].style.borderLeft = borderStyle
+      }
+    } else if (i % gridSizeSlider.value === 0) {
+      gridContainer.children[i].style.borderLeft = borderStyle
+    }
+  }
+}
+
+function hideGridBorders () {
+  for (let i = 0; i < gridContainer.children.length; i++) {
+    gridContainer.children[i].style.border = 'none'
   }
 }
 
 createGrid(16)
-
-// TO DO
-// const boxes and const gridChildren are the same
-// fix repeating code for mousedown and mouseenter events
-// improve tool picker
-
-// NEAR FUTURE FEATURES
-// level 1
-// pencil color options 
-// change background color
-// keyboard shortcuts
-// eraser/pencil size (relative to grid size)
-// color picker 
-// grid lines toggle
-// rainbow mode 
-// shading/lighting
-
-// level 2
-// improve mouse tracking for fast movements
-// fill unpainted squares
-// scale drawing
