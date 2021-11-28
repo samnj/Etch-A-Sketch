@@ -62,22 +62,22 @@ function addGridListeners () {
   const boxes = document.querySelectorAll('.box')
   boxes.forEach(box => box.addEventListener('mousedown', (e) => {
     e.preventDefault()
-    applyToolAction(box)
+    applyToolAction(e, box)
   }))
   boxes.forEach(box => box.addEventListener('mouseenter', (e) => {
-    if (e.buttons > 0) {
-      applyToolAction(box)
-    }
+    applyToolAction(e, box)
   }))
 }
 
-function applyToolAction (box) {
-  if (tool === 'pencil') {
-    box.style.backgroundColor = pencilColor.value
-    box.classList.add('painted')
-  } else if (tool === 'eraser') {
-    box.style.backgroundColor = bgColor.value
-    box.classList.remove('painted')
+function applyToolAction (e, box) {
+  if (e.buttons === 1) {
+    if (tool === 'pencil') {
+      box.style.backgroundColor = pencilColor.value
+      box.classList.add('painted')
+    } else if (tool === 'eraser') {
+      box.style.backgroundColor = bgColor.value
+      box.classList.remove('painted')
+    }
   }
 }
 
